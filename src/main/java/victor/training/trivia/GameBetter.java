@@ -81,12 +81,10 @@ public class GameBetter implements IGame {
 		}
 	}
 
-	public boolean wrongAnswer() {
+	public void wrongAnswer() {
 		System.out.println(messages.getWrongAnswer(currentPlayer().getName()));
 		getCurrentPlayer().setInPenaltyBox(true);
-
 		nextPlayer();
-		return true;
 	}
 
 	private Player getCurrentPlayer() {
