@@ -19,39 +19,36 @@ public class GameBetter implements IGame {
 	}
 
 	public void roll(int roll) {
-		
+
 		getCurrentPlayer().setLastRoll(roll);
 		System.out.println(messages.getPlayerRolledTheDice(currentPlayer()));
 
 		if (getCurrentPlayer().isInPenaltyBox()) {
 			tryToGetOutOfPenaltyBox();
-		}
-		else {
+		} else {
 			jumpToNextQuestion();
 		}
 	}
 
 	private void tryToGetOutOfPenaltyBox() {
 
-		if ( getCurrentPlayer().isGettingOutOfPenaltyBox() ) {
+		if (getCurrentPlayer().isGettingOutOfPenaltyBox()) {
 			System.out.println(messages.getPlayerGettingOutOfPenlatyBox(currentPlayer().getName()));
 			jumpToNextQuestion();
-		} 
-		else {
+		} else {
 			System.out.println(messages.getPlayerNotGettingOutOfPenlatyBox(currentPlayer().getName()));
 		}
 	}
 
-
 	private void jumpToNextQuestion() {
 		currentPlayer().advanceLastRolled();
 
-		System.out.println( messages.getPlayerAdvances( currentPlayer(), 
+		System.out.println(messages.getPlayerAdvances(currentPlayer(),
 				questionRepository.getCurrentCategory(currentPlayer().getPlace()).getLabel()));
 
 		askQuestion();
 	}
-	
+
 	private Player currentPlayer() {
 		return players.get(currentPlayerIndex);
 	}
@@ -62,36 +59,25 @@ public class GameBetter implements IGame {
 
 // TODO e un nume misleading care e ?
 	public boolean wasCorrectlyAnswered() {
-		if (getCurrentPlayer().isInPenaltyBox()) {
-			if (getCurrentPlayer().isGettingOutOfPenaltyBox()) {
+	 
+		if ( getCurrentPlayer().isInPenaltyBox() && !getCurrentPlayer().isGettingOutOfPenaltyBox() ) {
+			nextPlayer();
+			return true;
+		}
 
-				getCurrentPlayer().awardCoin();
-				System.out.println( messages.getCorrectAnswer(currentPlayer()) );
+		getCurrentPlayer().awardCoin();
+		System.out.println(messages.getCorrectAnswer(currentPlayer()));
 
-				boolean winner = getCurrentPlayer().didWon();
-				currentPlayerIndex++;
-				if (currentPlayerIndex == players.size())
-					currentPlayerIndex = 0;
+		boolean winner = getCurrentPlayer().didWon();
+		nextPlayer();
 
-				return winner;
-			} else {
-				currentPlayerIndex++;
-				if (currentPlayerIndex == players.size())
-					currentPlayerIndex = 0;
-				return true;
-			}
+		return winner;
+	}
 
-		} else {
-
-			getCurrentPlayer().awardCoin();
-			System.out.println( messages.getCorrectAnswer(currentPlayer()) );
-
-			boolean winner = getCurrentPlayer().didWon();
-			currentPlayerIndex++;
-			if (currentPlayerIndex == players.size())
-				currentPlayerIndex = 0;
-
-			return winner;
+	private void nextPlayer() {
+		currentPlayerIndex++;
+		if (currentPlayerIndex == players.size()) {
+			currentPlayerIndex = 0;
 		}
 	}
 
@@ -99,9 +85,7 @@ public class GameBetter implements IGame {
 		System.out.println(messages.getWrongAnswer(currentPlayer().getName()));
 		getCurrentPlayer().setInPenaltyBox(true);
 
-		currentPlayerIndex++;
-		if (currentPlayerIndex == players.size())
-			currentPlayerIndex = 0;
+		nextPlayer();
 		return true;
 	}
 
