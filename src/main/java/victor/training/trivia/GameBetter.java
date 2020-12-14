@@ -14,7 +14,6 @@ public class GameBetter implements IGame {
 	int currentPlayerIndex = 0;
 	boolean isGettingOutOfPenaltyBox;
 
-	// TODO e un bug ascuns in cod. Gaseste-l
 	public void addPlayer(String playerName) {
 		players.add(new Player(playerName));
 		System.out.println(messages.getAddPlayer(playerName, players.size()));
@@ -25,15 +24,32 @@ public class GameBetter implements IGame {
 		System.out.println(messages.getPlayerRolledTheDice(currentPlayer().getName(), roll));
 
 		if (getCurrentPlayer().isInPenaltyBox()) {
-			if (roll % 2 == 0) {
+			
+			tryToGetOutOfPenaltyBox(roll);
+		}
+		else {
+			jumpToNextQuestion(roll);
+		}
+	}
 
-				System.out.println(messages.getPlayerNotGettingOutOfPenlatyBox(currentPlayer().getName()));
-				isGettingOutOfPenaltyBox = false;
-				return;
-			}
+	private void tryToGetOutOfPenaltyBox(int roll) {
+
+		if (roll % 2 == 0) {
+			
+			System.out.println(messages.getPlayerNotGettingOutOfPenlatyBox(currentPlayer().getName()));
+			isGettingOutOfPenaltyBox = false;
+		} 
+		else {
+		
 			isGettingOutOfPenaltyBox = true;
 			System.out.println(messages.getPlayerGettingOutOfPenlatyBox(currentPlayer().getName()));
+			jumpToNextQuestion(roll);
 		}
+
+	}
+
+
+	private void jumpToNextQuestion(int roll) {
 		currentPlayer().advance(roll);
 
 		System.out.println(messages.getPlayerAdvances(currentPlayer().getName(), currentPlayer().getPlace(),
@@ -41,7 +57,7 @@ public class GameBetter implements IGame {
 
 		askQuestion();
 	}
-
+	
 	private Player currentPlayer() {
 		return players.get(currentPlayerIndex);
 	}
