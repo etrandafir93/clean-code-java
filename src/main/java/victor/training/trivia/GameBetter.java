@@ -24,7 +24,7 @@ public class GameBetter implements IGame {
 		
 		getCurrentPlayer().setLastRoll(roll);
 		
-		System.out.println(messages.getPlayerRolledTheDice(currentPlayer().getName(), roll));
+		System.out.println(messages.getPlayerRolledTheDice(currentPlayer()));
 
 		if (getCurrentPlayer().isInPenaltyBox()) {
 			
@@ -55,7 +55,7 @@ public class GameBetter implements IGame {
 	private void jumpToNextQuestion() {
 		currentPlayer().advance();
 
-		System.out.println(messages.getPlayerAdvances(currentPlayer().getName(), currentPlayer().getPlace(),
+		System.out.println( messages.getPlayerAdvances( currentPlayer(), 
 				questionRepository.getCurrentCategory(currentPlayer().getPlace()).getLabel()));
 
 		askQuestion();
@@ -75,8 +75,7 @@ public class GameBetter implements IGame {
 			if (isGettingOutOfPenaltyBox) {
 
 				getCurrentPlayer().awardCoin();
-				System.out.println(
-						messages.getCorrectAnswer(currentPlayer().getName(), getCurrentPlayer().getNumberOfCoins()));
+				System.out.println( messages.getCorrectAnswer(currentPlayer()) );
 
 				boolean winner = getCurrentPlayer().didWon();
 				currentPlayerIndex++;
@@ -94,8 +93,7 @@ public class GameBetter implements IGame {
 		} else {
 
 			getCurrentPlayer().awardCoin();
-			System.out.println(
-					messages.getCorrectAnswer(currentPlayer().getName(), getCurrentPlayer().getNumberOfCoins()));
+			System.out.println( messages.getCorrectAnswer(currentPlayer()) );
 
 			boolean winner = getCurrentPlayer().didWon();
 			currentPlayerIndex++;
