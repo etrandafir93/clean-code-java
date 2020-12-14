@@ -1,51 +1,35 @@
 package victor.training.trivia;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.EnumMap;
+import java.util.Map;
+
+import victor.training.trivia.QuestionProvider.Category;
+
 
 public class QuestionRepository {
-   private List<String> popQuestions = new LinkedList<>();
-   private List<String> scienceQuestions = new LinkedList<>();
-   private List<String> sportsQuestions = new LinkedList<>();
-   private List<String> rockQuestions = new LinkedList<>();
 
-   // TODO  Map<tip, List<String>>
-   public QuestionRepository() {
-      for (int i = 0; i < 50; i++) {
-         popQuestions.add("Pop Question " + i);
-         scienceQuestions.add("Science Question " + i);
-         sportsQuestions.add("Sports Question " + i);
-         rockQuestions.add("Rock Question " + i);
-      }
-   }
+	Map<Category, QuestionProvider> questions = new EnumMap<>(Category.class);
+	
+	public QuestionRepository() {
+		questions.put(Category.POP, new QuestionProvider(Category.POP));
+		questions.put(Category.ROCK, new QuestionProvider(Category.ROCK));
+		questions.put(Category.SPORTS, new QuestionProvider(Category.SPORTS));
+		questions.put(Category.SCIENCE, new QuestionProvider(Category.SCIENCE));
+	}
 
+	public QuestionProvider.Category getCurrentCategory(int place) {
+		switch (place % 4) {
+			case 0: return QuestionProvider.Category.POP;
+			case 1: return QuestionProvider.Category.SCIENCE;
+			case 2: return QuestionProvider.Category.SPORTS;
+			case 3: return QuestionProvider.Category.ROCK;
+			
+			default: throw new IllegalStateException("Unexpected value: " + place % 4);
+		}
+	}
 
-   public QuestionCategory getCurrentCategory(int place) {
-//      return QuestionCategory.values()[places[currentPlayer] % 4]; <periculos: te bazezi pe ordinea enumurilor
-      switch (place % 4) {
-         case 0:
-            return QuestionCategory.POP;
-         case 1:
-            return QuestionCategory.SCIENCE;
-         case 2:
-            return QuestionCategory.SPORTS;
-         case 3:
-            return QuestionCategory.ROCK;
-         default:
-            throw new IllegalStateException("Unexpected value: " + place % 4);
-      }
-   }
+	public String nextQuestion(int place) {
+		return questions.get( getCurrentCategory(place) ).nextQuestion();
+	}
 
-   public String nextQuestion(int place) {
-      QuestionCategory category = getCurrentCategory(place);
-      if (category == QuestionCategory.POP)
-         return popQuestions.remove(0);
-      if (category == QuestionCategory.SCIENCE)
-         return scienceQuestions.remove(0);
-      if (category == QuestionCategory.SPORTS)
-         return sportsQuestions.remove(0);
-      if (category == QuestionCategory.ROCK)
-         return rockQuestions.remove(0);
-      throw new IllegalArgumentException(category.name());
-   }
 }

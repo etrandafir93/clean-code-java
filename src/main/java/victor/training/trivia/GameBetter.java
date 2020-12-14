@@ -9,7 +9,7 @@ public class GameBetter implements IGame {
 	private final QuestionRepository questionRepository = new QuestionRepository();
 
 	private List<Player> players = new ArrayList<>();
-	private DisplayMessages messages = new DisplayMessages();;
+	private DisplayMessages messages = new DisplayMessages();
 
 	int currentPlayerIndex = 0;
 
@@ -29,7 +29,29 @@ public class GameBetter implements IGame {
 			jumpToNextQuestion();
 		}
 	}
+	
+	public boolean didCorrectAnswerEndTheGame() {
+		 
+		if ( getCurrentPlayer().isInPenaltyBox() && !getCurrentPlayer().isGettingOutOfPenaltyBox() ) {
+			nextPlayer();
+			return true;
+		}
+		getCurrentPlayer().awardCoin();
+		System.out.println(messages.getCorrectAnswer(currentPlayer()));
 
+		boolean keepPlaying = !getCurrentPlayer().didWon();
+		nextPlayer();
+
+		return keepPlaying;
+	}
+
+	public void wrongAnswer() {
+		System.out.println(messages.getWrongAnswer(currentPlayer().getName()));
+		getCurrentPlayer().setInPenaltyBox(true);
+		nextPlayer();
+	}
+	
+	
 	private void tryToGetOutOfPenaltyBox() {
 
 		if (getCurrentPlayer().isGettingOutOfPenaltyBox()) {
@@ -55,27 +77,6 @@ public class GameBetter implements IGame {
 
 	private void askQuestion() {
 		System.out.println(questionRepository.nextQuestion(currentPlayer().getPlace()));
-	}
-
-	public boolean didCorrectAnswerEndTheGame() {
-	 
-		if ( getCurrentPlayer().isInPenaltyBox() && !getCurrentPlayer().isGettingOutOfPenaltyBox() ) {
-			nextPlayer();
-			return true;
-		}
-		getCurrentPlayer().awardCoin();
-		System.out.println(messages.getCorrectAnswer(currentPlayer()));
-
-		boolean keepPlaying = !getCurrentPlayer().didWon();
-		nextPlayer();
-
-		return keepPlaying;
-	}
-
-	public void wrongAnswer() {
-		System.out.println(messages.getWrongAnswer(currentPlayer().getName()));
-		getCurrentPlayer().setInPenaltyBox(true);
-		nextPlayer();
 	}
 
 	private void nextPlayer() {

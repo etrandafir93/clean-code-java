@@ -2,17 +2,17 @@ package victor.training.trivia;
 
 class DisplayMessages {
 
-	private String addPlayer;
-	private String playerRolledTheDice;
-	private String playerNotGettingOutOfPenlatyBox;
-	private String playerGettingOutOfPenlatyBox;
-	private String playerAdvances;
-	private String correctAnswer;
-	private String wrongAnswer;
+	private final String addPlayer;
+	private final String playerRolledTheDice;
+	private final String playerNotGettingOutOfPenlatyBox;
+	private final String playerGettingOutOfPenlatyBox;
+	private final String playerAdvances;
+	private final String correctAnswer;
+	private final String wrongAnswer;
 
 	public DisplayMessages() {
 
-		// read them from a lang file?
+		// read them from a lang file if needed
 		this.addPlayer = "%s was added\r\nThey are player number %s";
 		this.playerRolledTheDice = "%s is the current player\r\nThey have rolled a %s";
 		this.playerNotGettingOutOfPenlatyBox = "%s is not getting out of the penalty box";
