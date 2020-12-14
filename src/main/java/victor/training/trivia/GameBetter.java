@@ -21,20 +21,23 @@ public class GameBetter implements IGame {
 
 	public void roll(int roll) {
 
+		
+		getCurrentPlayer().setLastRoll(roll);
+		
 		System.out.println(messages.getPlayerRolledTheDice(currentPlayer().getName(), roll));
 
 		if (getCurrentPlayer().isInPenaltyBox()) {
 			
-			tryToGetOutOfPenaltyBox(roll);
+			tryToGetOutOfPenaltyBox();
 		}
 		else {
-			jumpToNextQuestion(roll);
+			jumpToNextQuestion();
 		}
 	}
 
-	private void tryToGetOutOfPenaltyBox(int roll) {
+	private void tryToGetOutOfPenaltyBox() {
 
-		if (roll % 2 == 0) {
+		if ( getCurrentPlayer().isGettingOutOfPenaltyBox() ) {
 			
 			System.out.println(messages.getPlayerNotGettingOutOfPenlatyBox(currentPlayer().getName()));
 			isGettingOutOfPenaltyBox = false;
@@ -43,14 +46,14 @@ public class GameBetter implements IGame {
 		
 			isGettingOutOfPenaltyBox = true;
 			System.out.println(messages.getPlayerGettingOutOfPenlatyBox(currentPlayer().getName()));
-			jumpToNextQuestion(roll);
+			jumpToNextQuestion();
 		}
 
 	}
 
 
-	private void jumpToNextQuestion(int roll) {
-		currentPlayer().advance(roll);
+	private void jumpToNextQuestion() {
+		currentPlayer().advance();
 
 		System.out.println(messages.getPlayerAdvances(currentPlayer().getName(), currentPlayer().getPlace(),
 				questionRepository.getCurrentCategory(currentPlayer().getPlace()).getLabel()));

@@ -5,6 +5,7 @@ class Player {
 	private final String name;
 	private int place;
 	private int purse;
+	private int lastRoll;
 	private boolean inPenaltyBox;
 
 	public Player(String name) {
@@ -34,9 +35,17 @@ class Player {
 	public void awardCoin() {
 		this.purse++;
 	}
+	
+	public void setLastRoll(int newRoll) {
+		this.lastRoll = newRoll;
+	}
+	
+	public boolean isGettingOutOfPenaltyBox() {
+		return lastRoll % 2 == 0;
+	}
 
-	public void advance(int roll) {
-		place += roll;
+	public void advance() {
+		place += lastRoll;
 		if (place >= GameBetter.BOARD_SIZE) {
 			place -= GameBetter.BOARD_SIZE;
 		}
