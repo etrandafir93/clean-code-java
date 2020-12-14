@@ -9,37 +9,38 @@ public class GameBetter implements IGame {
    private final QuestionRepository questionRepository = new QuestionRepository();
 
    private List<Player> players = new ArrayList<>();
+   private DisplayMessages messages = new DisplayMessages();;
 
    int currentPlayerIndex = 0;
    boolean isGettingOutOfPenaltyBox;
+   
 
-   private Player getCurrentPlayer() {
-	   return players.get(currentPlayerIndex);
-   }
    
    // TODO e un bug ascuns in cod. Gaseste-l
    public void addPlayer(String playerName) {
       players.add(new Player(playerName));
-      System.out.println(playerName + " was added");
-      System.out.println("They are player number " + players.size());
+      System.out.println( messages.getAddPlayer(playerName, players.size()) );
    }
 
    public void roll(int roll) {
-      System.out.println(currentPlayer().getName() + " is the current player");
-      System.out.println("They have rolled a " + roll);
+
+      System.out.println( messages.getPlayerRolledTheDice(currentPlayer().getName(), roll));
 
       if ( getCurrentPlayer().isInPenaltyBox() ) {
          if (roll % 2 == 0) {
-            System.out.println(currentPlayer().getName() + " is not getting out of the penalty box");
+        	 
+        	 System.out.println( messages.getPlayerNotGettingOutOfPenlatyBox(currentPlayer().getName()) );
             isGettingOutOfPenaltyBox = false;
             return;
          }
          isGettingOutOfPenaltyBox = true;
-         System.out.println(currentPlayer().getName() + " is getting out of the penalty box");
+    	 System.out.println( messages.getPlayerGettingOutOfPenlatyBox(currentPlayer().getName()) );
       }
       currentPlayer().advance(roll);
-      System.out.println(currentPlayer().getName() + "'s new location is " + currentPlayer().getPlace());
-      System.out.println("The category is " + questionRepository.getCurrentCategory(currentPlayer().getPlace()).getLabel());
+      
+      System.out.println( messages.getPlayerAdvances( currentPlayer().getName(), currentPlayer().getPlace(), 
+    		  questionRepository.getCurrentCategory(currentPlayer().getPlace()).getLabel() ));
+      
       askQuestion();
    }
 
@@ -55,12 +56,9 @@ public class GameBetter implements IGame {
    public boolean wasCorrectlyAnswered() {
       if ( getCurrentPlayer().isInPenaltyBox() ) {
          if (isGettingOutOfPenaltyBox) {
-            System.out.println("Answer was correct!!!!");
-            getCurrentPlayer().awardCoin();
-            System.out.println(currentPlayer().getName()
-                               + " now has "
-                               + getCurrentPlayer().getNumberOfCoins()
-                               + " Gold Coins.");
+        	 
+        	 getCurrentPlayer().awardCoin();
+        	 System.out.println( messages.getCorrectAnswer(currentPlayer().getName(),  getCurrentPlayer().getNumberOfCoins()) );
 
             boolean winner = getCurrentPlayer().didWon();
             currentPlayerIndex++;
@@ -76,8 +74,8 @@ public class GameBetter implements IGame {
 
       } else {
 
+    	  getCurrentPlayer().awardCoin();
          System.out.println("Answer was corrent!!!!");
-         getCurrentPlayer().awardCoin();
          System.out.println(currentPlayer().getName()
                             + " now has "
                             + getCurrentPlayer().getNumberOfCoins()
@@ -92,8 +90,7 @@ public class GameBetter implements IGame {
    }
 
    public boolean wrongAnswer() {
-      System.out.println("Question was incorrectly answered");
-      System.out.println(currentPlayer().getName() + " was sent to the penalty box");
+	  System.out.println( messages.getWrongAnswer(currentPlayer().getName()) );
       getCurrentPlayer().setInPenaltyBox( true );
 
       currentPlayerIndex++;
@@ -102,5 +99,8 @@ public class GameBetter implements IGame {
    }
 
 
+   private Player getCurrentPlayer() {
+	   return players.get(currentPlayerIndex);
+   }
   
 }
