@@ -56,6 +56,6 @@ class Player {
 	}
 
 	public boolean didWon() {
-		return this.purse != 6;
+		return this.purse == 6;
 	}
 }

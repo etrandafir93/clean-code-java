@@ -57,21 +57,25 @@ public class GameBetter implements IGame {
 		System.out.println(questionRepository.nextQuestion(currentPlayer().getPlace()));
 	}
 
-// TODO e un nume misleading care e ?
-	public boolean wasCorrectlyAnswered() {
+	public boolean didCorrectAnswerEndTheGame() {
 	 
 		if ( getCurrentPlayer().isInPenaltyBox() && !getCurrentPlayer().isGettingOutOfPenaltyBox() ) {
 			nextPlayer();
 			return true;
 		}
-
 		getCurrentPlayer().awardCoin();
 		System.out.println(messages.getCorrectAnswer(currentPlayer()));
 
-		boolean winner = getCurrentPlayer().didWon();
+		boolean keepPlaying = !getCurrentPlayer().didWon();
 		nextPlayer();
 
-		return winner;
+		return keepPlaying;
+	}
+
+	public void wrongAnswer() {
+		System.out.println(messages.getWrongAnswer(currentPlayer().getName()));
+		getCurrentPlayer().setInPenaltyBox(true);
+		nextPlayer();
 	}
 
 	private void nextPlayer() {
@@ -79,12 +83,6 @@ public class GameBetter implements IGame {
 		if (currentPlayerIndex == players.size()) {
 			currentPlayerIndex = 0;
 		}
-	}
-
-	public void wrongAnswer() {
-		System.out.println(messages.getWrongAnswer(currentPlayer().getName()));
-		getCurrentPlayer().setInPenaltyBox(true);
-		nextPlayer();
 	}
 
 	private Player getCurrentPlayer() {

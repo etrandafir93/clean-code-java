@@ -42,7 +42,7 @@ public class GameTest {
 				if (rand.nextInt(9) == 7) {
 					aGame.wrongAnswer();
 				} else {
-					notAWinner = aGame.wasCorrectlyAnswered();
+					notAWinner = aGame.didCorrectAnswerEndTheGame();
 				}
 				
 			} while (notAWinner);
