@@ -75,11 +75,7 @@ public class GameBetter implements IGame {
       } else {
 
     	  getCurrentPlayer().awardCoin();
-         System.out.println("Answer was correct!!!!");
-         System.out.println(currentPlayer().getName()
-                            + " now has "
-                            + getCurrentPlayer().getNumberOfCoins()
-                            + " Gold Coins.");
+         System.out.println( messages.getCorrectAnswer(currentPlayer().getName(), getCurrentPlayer().getNumberOfCoins()) );
 
          boolean winner = getCurrentPlayer().didWon();
          currentPlayerIndex++;
