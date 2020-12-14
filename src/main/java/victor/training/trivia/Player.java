@@ -45,10 +45,10 @@ class Player {
 	}
 
 	public boolean isGettingOutOfPenaltyBox() {
-		return lastRoll % 2 == 0;
+		return lastRoll % 2 != 0;
 	}
 
-	public void advance() {
+	public void advanceLastRolled() {
 		place += lastRoll;
 		if (place >= GameBetter.BOARD_SIZE) {
 			place -= GameBetter.BOARD_SIZE;

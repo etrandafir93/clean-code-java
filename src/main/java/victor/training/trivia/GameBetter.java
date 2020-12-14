@@ -12,7 +12,6 @@ public class GameBetter implements IGame {
 	private DisplayMessages messages = new DisplayMessages();;
 
 	int currentPlayerIndex = 0;
-	boolean isGettingOutOfPenaltyBox;
 
 	public void addPlayer(String playerName) {
 		players.add(new Player(playerName));
@@ -20,14 +19,11 @@ public class GameBetter implements IGame {
 	}
 
 	public void roll(int roll) {
-
 		
 		getCurrentPlayer().setLastRoll(roll);
-		
 		System.out.println(messages.getPlayerRolledTheDice(currentPlayer()));
 
 		if (getCurrentPlayer().isInPenaltyBox()) {
-			
 			tryToGetOutOfPenaltyBox();
 		}
 		else {
@@ -38,22 +34,17 @@ public class GameBetter implements IGame {
 	private void tryToGetOutOfPenaltyBox() {
 
 		if ( getCurrentPlayer().isGettingOutOfPenaltyBox() ) {
-			
-			System.out.println(messages.getPlayerNotGettingOutOfPenlatyBox(currentPlayer().getName()));
-			isGettingOutOfPenaltyBox = false;
-		} 
-		else {
-		
-			isGettingOutOfPenaltyBox = true;
 			System.out.println(messages.getPlayerGettingOutOfPenlatyBox(currentPlayer().getName()));
 			jumpToNextQuestion();
+		} 
+		else {
+			System.out.println(messages.getPlayerNotGettingOutOfPenlatyBox(currentPlayer().getName()));
 		}
-
 	}
 
 
 	private void jumpToNextQuestion() {
-		currentPlayer().advance();
+		currentPlayer().advanceLastRolled();
 
 		System.out.println( messages.getPlayerAdvances( currentPlayer(), 
 				questionRepository.getCurrentCategory(currentPlayer().getPlace()).getLabel()));
@@ -72,7 +63,7 @@ public class GameBetter implements IGame {
 // TODO e un nume misleading care e ?
 	public boolean wasCorrectlyAnswered() {
 		if (getCurrentPlayer().isInPenaltyBox()) {
-			if (isGettingOutOfPenaltyBox) {
+			if (getCurrentPlayer().isGettingOutOfPenaltyBox()) {
 
 				getCurrentPlayer().awardCoin();
 				System.out.println( messages.getCorrectAnswer(currentPlayer()) );
