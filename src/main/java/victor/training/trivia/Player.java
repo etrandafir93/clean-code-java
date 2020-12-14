@@ -40,6 +40,10 @@ class Player {
 		this.lastRoll = newRoll;
 	}
 	
+	public int getLastRoll() {
+		return lastRoll;
+	}
+
 	public boolean isGettingOutOfPenaltyBox() {
 		return lastRoll % 2 == 0;
 	}

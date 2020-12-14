@@ -26,8 +26,8 @@ class DisplayMessages {
 		return String.format(addPlayer, playerName, numberOfPlayers);
 	}
 
-	public String getPlayerRolledTheDice(String playerName, int roll) {
-		return String.format(playerRolledTheDice, playerName, roll);
+	public String getPlayerRolledTheDice(Player player) {
+		return String.format(playerRolledTheDice, player.getName(), player.getLastRoll());
 	}
 
 	public String getPlayerNotGettingOutOfPenlatyBox(String playerName) {
@@ -38,12 +38,12 @@ class DisplayMessages {
 		return String.format(playerGettingOutOfPenlatyBox, playerName);
 	}
 
-	public String getPlayerAdvances(String playerName, int playerPosition, String newCategory) {
-		return String.format(playerAdvances, playerName, playerPosition, newCategory);
+	public String getPlayerAdvances(Player player, String newCategory) {
+		return String.format(playerAdvances, player.getName(), player.getPlace(), newCategory);
 	}
 
-	public String getCorrectAnswer(String playerName, int numberOfCoins) {
-		return String.format(correctAnswer, playerName, numberOfCoins);
+	public String getCorrectAnswer(Player player) {
+		return String.format(correctAnswer, player.getName(), player.getNumberOfCoins());
 	}
 
 	public String getWrongAnswer(String playerName) {
